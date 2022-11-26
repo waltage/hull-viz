@@ -94,6 +94,7 @@ export class Preparata {
     this._drawMin(p);
 
     this._drawBisectors(p);
+    this._drawAlpha(p);
   }
   togglePolar() {
     this.showPolar = !this.showPolar;
@@ -195,6 +196,34 @@ export class Preparata {
     p.strokeWeight(20);
     this.ccBisectors.next.draw(p);
     this.ccBisectors.prior.draw(p);
+    p.pop();
+  }
+  _drawAlpha(p) {
+    if (!this.showAlpha || this.points.length < 4) {
+      return;
+    }
+    // alpha is m -> last point -> Root
+    let littleM = this.tree.min();
+    let littleMAbs = littleM.asAbsolute(p);
+
+    let pSubI = this.points[this.points.length - 1];
+    let pSubIAbs = pSubI.asAbsolute(p);
+
+    let bigM = this.tree._root.data;
+    let bigMAbs = bigM.asAbsolute(p);
+
+    let alpha =
+      Math.atan2(bigM.y - pSubI.y, bigM.x - pSubI.x) -
+      Math.atan2(littleM.y - pSubI.y, littleM.x - pSubI.x);
+
+    p.push();
+    p.stroke(120, 120, 0);
+    p.strokeWeight(4);
+    p.line(littleMAbs.x, littleMAbs.y, pSubIAbs.x, pSubIAbs.y);
+    p.line(pSubIAbs.x, pSubIAbs.y, bigMAbs.x, bigMAbs.y);
+    p.noStroke();
+    p.fill(120, 120, 0);
+    p.text("Alpha:" + alpha.toPrecision(3), 20, p.height - 20);
     p.pop();
   }
   _getInteriorZero() {
