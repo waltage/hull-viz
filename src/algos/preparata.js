@@ -45,22 +45,31 @@ export class Preparata extends BaseDynamicHull {
   }
 
   getPolarBounds(pnt) {
+    // Find the counter-clockwise previous and next nodes based on polar coordinate ranking
+    // Runtime: O(log n)
     this.hullTree.insert(pnt);
     let nodeIter = this.hullTree.findIter(pnt);
+    let result = { prior: null, next: null };
 
     if (pnt.isEqualTo(this.hullTree.min())) {
       // this is lowest polar... take next & max;
-      this.bisectors.next = nodeIter.next();
-      this.bisectors.prior = this.hullTree.max();
+      result.prior = this.hullTree.max();
+      result.next = nodeIter.next();
+      this.hullTree.remove(pnt);
+      return result;
     } else if (pnt.isEqualTo(this.hullTree.max())) {
       // this is the highest polar... take prev and min;
-      this.bisectors.prior = nodeIter.prev();
-      this.bisectors.next = this.hullTree.min();
+      result.prior = nodeIter.prev();
+      result.next = this.hullTree.min();
+      this.hullTree.remove(pnt);
+      return result;
     } else {
       // we're in between two valid points... take prev and next;
-      this.bisectors.prior = nodeIter.prev();
+      result.prior = nodeIter.prev();
       nodeIter.next();
-      this.bisectors.next = nodeIter.next();
+      result.next = nodeIter.next();
+      this.hullTree.remove(pnt);
+      return result;
     }
   }
 
@@ -68,6 +77,7 @@ export class Preparata extends BaseDynamicHull {
     this.points.push(pnt);
     this.hullTree.insert(pnt);
     if (this.hullTree.size < 3) {
+      this.hullTree.insert(pnt);
       return;
     } else if (this.hullTree.size == 3) {
       for (let i = 0; i < 3; i++) {
@@ -78,7 +88,7 @@ export class Preparata extends BaseDynamicHull {
       this.interior.y /= 3;
       return;
     }
-    this.getPolarBounds(pnt);
+    this.bisectors = this.getPolarBounds(pnt);
     // remaining logic...
   }
 
