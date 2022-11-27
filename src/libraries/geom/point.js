@@ -10,7 +10,6 @@ export class Point {
   }
 
   move(x, y) {
-    console.log("hello");
     this.x += x;
     this.y += y;
   }

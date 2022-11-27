@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
   </head>
 
-  <body>
+  <body onload="ALGORITHMS.preparata.makeP5('canvas')">
     <div class="algo-container">
       <div class="algo-title"><span>Preparata 79 zz334 </span></div>
       <div class="algo-sketch">
@@ -29,7 +29,8 @@
           </button>
           <button onclick="algo.toggleAlpha()">Toggle alpha</button>
         </div>
-        <button onclick="ALGORITHMS.preparata.destroyP5()">Reset</button>
+        <button onclick="ALGORITHMS.preparata.reset()">reset</button>
+        <button onclick="ALGORITHMS.preparata.destroyP5()">destroy</button>
         <button onclick="ALGORITHMS.preparata.makeP5('canvas')">Start</button>
       </div>
     </div>

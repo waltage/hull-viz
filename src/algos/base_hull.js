@@ -34,9 +34,6 @@ export class BaseDynamicHull {
       }
     */
     this.annotations = {};
-
-    Reflect.defineProperty(this, "history", { writable: false });
-    Reflect.defineProperty(this, "p5Position", { writable: false });
   }
 
   click(event) {
