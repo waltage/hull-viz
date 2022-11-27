@@ -1,7 +1,4 @@
-import { Point } from "../libraries/geom/point.js";
-import { RBTree } from "../libraries/rbtree/rbtree.js";
-
-export class Preparata {
+export class Preparata2 {
   constructor() {
     this.points = [];
     this.interior = new Point(0, 0);
@@ -37,7 +34,6 @@ export class Preparata {
       next: null,
     };
   }
-
   insert(x, y) {
     let newPt = new Point(x, y);
     this.points.push(newPt);
@@ -80,6 +76,7 @@ export class Preparata {
 
     this.tree.remove(pt);
   }
+
   tangents(pt) {
     this.getBisectors(pt);
   }

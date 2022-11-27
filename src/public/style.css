@@ -1,0 +1,42 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.algo-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.algo-sketch {
+  border: 1px solid black;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 15px;
+}
+.algo-controls {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.algo-toggles {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+.algo-toggles button {
+  margin: 5px;
+}
+.algo-title {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
+  font-size: 20px;
+}
