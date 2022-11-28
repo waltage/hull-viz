@@ -7,7 +7,20 @@
     <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
   </head>
 
-  <body onload="ALGORITHMS.preparata.makeP5('canvas')">
+  <body onload="ALGORITHMS.walt.makeP5('canvas')">
+    <div class="algo-container">
+      <div class="algo-title"><span>Walt 22</span></div>
+      <div class="algo-sketch">
+        <div id="canvas"></div>
+      </div>
+      <div class="algo-controls">
+        <div class="algo-toggles"></div>
+
+        <div class="algo-toggles"></div>
+        <button onclick="ALGORITHMS.walt.reset()">reset</button>
+      </div>
+    </div>
+    <!--
     <div class="algo-container">
       <div class="algo-title"><span>Preparata 79 zz334 </span></div>
       <div class="algo-sketch">
@@ -34,5 +47,5 @@
         <button onclick="ALGORITHMS.preparata.makeP5('canvas')">Start</button>
       </div>
     </div>
-  </body>
+  --></body>
 </html>

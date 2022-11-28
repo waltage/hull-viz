@@ -1,17 +1,38 @@
-import { Point } from "../libraries/geom/point.js";
+import { Point } from "../libraries/geom/point";
 
-function raise(msg) {
+function raise(msg: string) {
   window.alert(msg);
   throw new Error(msg);
 }
 
-export const CLICK_MODE = {
-  INSERT: "insert",
-  DELETE: "delete",
-  QUERY_INSIDE: "query-inside",
-};
+enum CLICK_MODE {
+  INSERT = "insert",
+  DELETE = "delete",
+  QUERY_INSIDE = "query-inside",
+}
 
+interface P5Position {
+  active: boolean;
+  destroy: boolean;
+  position: any;
+  targetId: string;
+  mouse: { x: number; y: number };
+}
+
+interface Annotation {
+  enabled: boolean;
+  drawFn: Function;
+}
+type historyItem = { point: Point; action: string };
+type clickEvent = { [index: symbol]: any } & { x: number; y: number };
+
+/** Class representing Base DynamicHull operations for p5 animations. */
 export class BaseDynamicHull {
+  history: historyItem[];
+  mode: CLICK_MODE;
+  p5Position: P5Position;
+  annotations: { [index: symbol]: Annotation };
+
   constructor() {
     this.history = [];
     this.mode = CLICK_MODE.INSERT;
@@ -36,7 +57,8 @@ export class BaseDynamicHull {
     this.annotations = {};
   }
 
-  click(event) {
+  /** Click handler for p5 click events. */
+  click(event: clickEvent) {
     let x = event.x - this.p5Position.position.left + window.scrollX;
     let y = event.y - this.p5Position.position.top + window.scrollY;
 
@@ -52,41 +74,43 @@ export class BaseDynamicHull {
     }
   }
 
-  insertPreHook(x, y) {
+  /** P5 sketch calls insertion prehook with coordinates. */
+  insertPreHook(x: number, y: number) {
     // console.log(x, y);
     let newPoint = new Point(x, y);
     this.history.push({ point: newPoint, action: "insert" });
     this.insert(newPoint);
   }
 
-  insert(pnt) {
+  /** Abstract Method -- override for insertion. */
+  insert(pnt: Point) {
     raise("Insert not implemented");
   }
 
-  deletePreHook(x, y) {
-    // smear coordinates to find a point to remove
+  deletePreHook(x: number, y: number) {
     let delPoint = new Point(x, y);
     this.history.push({ point: delPoint, action: "delete" });
-    this.delete();
+    this.delete(delPoint);
   }
 
-  delete(pnt) {
+  delete(pnt: Point) {
     raise("Delete not implemented");
   }
 
-  queryInsidePreHook(x, y) {
+  queryInsidePreHook(x: number, y: number) {
     let qPoint = new Point(x, y);
     this.queryInside(qPoint);
   }
 
-  queryInside(pnt) {
+  queryInside(pnt: Point) {
     raise("Query (Inside) not implemented");
   }
 
   reset() {
     this.history = [];
     for (const [name, annotation] of Object.entries(this.annotations)) {
-      annotation.enabled = false;
+      let a = <Annotation>annotation;
+      a.enabled = false;
     }
     this.resetPostHook();
   }
@@ -95,31 +119,32 @@ export class BaseDynamicHull {
     raise("Reset not implemented");
   }
 
-  draw(p) {
+  draw(p: any) {
     raise("Draw Not Implemented");
   }
 
-  annotate(p) {
+  annotate(p: any) {
     for (const [name, annotation] of Object.entries(this.annotations)) {
-      if (annotation.enabled && annotation.drawFn) {
+      let a = <Annotation>annotation;
+      if (a.enabled && a.drawFn) {
         p.push();
-        annotation.drawFn(p);
+        a.drawFn(p);
         p.pop();
       }
     }
   }
 
-  toggleAnnotation(annotationName) {
+  toggleAnnotation(annotationName: symbol) {
     this.annotations[annotationName].enabled =
       !this.annotations[annotationName].enabled;
   }
 
-  makeP5(targetId) {
+  makeP5(targetId: string) {
     if (this.p5Position.active) {
       return;
     }
     this.p5Position.active = true;
-    const makeSketch = (sketch) => {
+    const makeSketch = (sketch: any) => {
       sketch.setup = () => {
         let canvas = sketch.createCanvas(600, 600);
         canvas.mouseClicked(this.click.bind(this));
@@ -150,6 +175,7 @@ export class BaseDynamicHull {
         sketch.pop();
       };
     };
+    // @ts-ignore
     new p5(makeSketch, targetId);
     this.p5Position.targetId = targetId;
     this._getCanvasSizing();
@@ -172,7 +198,18 @@ export class BaseDynamicHull {
   }
 }
 
-export function drawText(p, text, x, y, { color, size } = {}) {
+type drawTextFormat = {
+  color?: any;
+  size?: number;
+};
+
+export function drawText(
+  p: any,
+  text: string,
+  x: number,
+  y: number,
+  { color, size }: drawTextFormat = {}
+) {
   p.push();
   p.noStroke();
   size = size ? size : 10;
@@ -185,7 +222,17 @@ export function drawText(p, text, x, y, { color, size } = {}) {
   p.pop();
 }
 
-export function drawLine(p, pnt1, pnt2, { weight, color } = {}) {
+type drawLineFormat = {
+  color?: any;
+  weight?: number;
+};
+
+export function drawLine(
+  p: any,
+  pnt1: Point,
+  pnt2: Point,
+  { weight, color }: drawLineFormat = {}
+) {
   p.push();
   weight = weight ? weight : 1;
   color = color ? color : 0;
@@ -195,6 +242,6 @@ export function drawLine(p, pnt1, pnt2, { weight, color } = {}) {
   p.pop();
 }
 
-export async function sleep(millis) {
+export async function sleep(millis: number): Promise<any> {
   return new Promise((resolve) => setTimeout(resolve, millis));
 }

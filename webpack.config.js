@@ -1,9 +1,14 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
+const glob = require("glob");
 
 module.exports = {
+  resolve: {
+    extensions: [".ts", ".js", ".json", ".html", ".css"],
+  },
   entry: {
     main: "./index.js",
+    typescript: glob.sync("./src/**/*.ts"),
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -30,6 +35,11 @@ module.exports = {
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.ts$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
       },
     ],
   },

@@ -1,7 +1,7 @@
 import { sameSidePoints } from "../libraries/geom/orientation.js";
-import { Point } from "../libraries/geom/point.js";
+import { Point } from "../libraries/geom/point";
 import { RBTree } from "../libraries/rbtree/rbtree.js";
-import { BaseDynamicHull, drawText, sleep, drawLine } from "./base_hull.js";
+import { BaseDynamicHull, drawText, sleep, drawLine } from "./baseHull";
 
 function setPointStyle(p) {
   p.strokeWeight(5);
