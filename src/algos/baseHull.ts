@@ -19,7 +19,7 @@ interface P5Position {
   mouse: { x: number; y: number };
 }
 
-interface Annotation {
+export interface Annotation {
   enabled: boolean;
   drawFn: Function;
 }
@@ -31,7 +31,7 @@ export class BaseDynamicHull {
   history: historyItem[];
   mode: CLICK_MODE;
   p5Position: P5Position;
-  annotations: { [index: symbol]: Annotation };
+  annotations: { [index: string]: Annotation };
 
   constructor() {
     this.history = [];
@@ -134,7 +134,11 @@ export class BaseDynamicHull {
     }
   }
 
-  toggleAnnotation(annotationName: symbol) {
+  addAnnotation(name: string, cb: (p: any) => void) {
+    this.annotations[name] = {enabled: false, drawFn: cb};
+  }
+
+  toggleAnnotation(annotationName: string) {
     this.annotations[annotationName].enabled =
       !this.annotations[annotationName].enabled;
   }

@@ -1,4 +1,3 @@
-import { sameSidePoints } from "../libraries/geom/orientation.js";
 import { Point } from "../libraries/geom/point";
 import { RBTree } from "../libraries/rbtree/rbtree.js";
 import { BaseDynamicHull, drawText, sleep, drawLine } from "./baseHull";

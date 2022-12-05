@@ -7,17 +7,20 @@
     <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
   </head>
 
-  <body onload="ALGORITHMS.walt.makeP5('canvas')">
+  <body onload="ALGORITHMS.bakerStaticQuickHull.makeP5('canvas')">
     <div class="algo-container">
-      <div class="algo-title"><span>Walt 22</span></div>
+      <div class="algo-title"><span>Baker Static QuickHull</span></div>
       <div class="algo-sketch">
         <div id="canvas"></div>
       </div>
       <div class="algo-controls">
-        <div class="algo-toggles"></div>
+        <div class="algo-toggles">
+          <button onclick="ALGORITHMS.bakerStaticQuickHull.runQh()">Run Static QH</button>
+        </div>
 
         <div class="algo-toggles"></div>
-        <button onclick="ALGORITHMS.walt.reset()">reset</button>
+        
+        <button onclick="ALGORITHMS.bakerStaticQuickHull.reset()">reset</button>
       </div>
     </div>
     <!--
